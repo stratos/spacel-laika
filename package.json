@@ -1,6 +1,6 @@
 {
   "name": "spacel-laika",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Spacel test application",
   "main": "app.js",
   "scripts": {
