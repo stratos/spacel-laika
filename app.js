@@ -9,6 +9,7 @@ const config = require('./config');
 require('./resources/disk')(router);
 require('./resources/environment')(router);
 require('./resources/redis')(router);
+require('./resources/root')(router);
 
 // Start server:
 const app = koa();

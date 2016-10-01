@@ -1,9 +1,11 @@
 'use strict';
 
+exports.VERSION = require('./package.json').version;
+
 exports.DISK_PATH = process.env.DISK_PATH;
 exports.ENVIRONMENT = {
   message: process.env.MESSAGE || '(not found)',
-  version: require('./package.json').version
+  version: exports.VERSION
 };
 exports.PORT = process.env.PORT || 8080;
 exports.POSTGRES_URL = process.env.POSTGRES_URL;
