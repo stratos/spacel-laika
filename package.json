@@ -1,0 +1,28 @@
+{
+  "name": "spacel-laika",
+  "version": "0.0.1",
+  "description": "Spacel test application",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "lint": "find . -iname \"*.js\" -not -path \"./node_modules/*\" -print0 | xargs -0 eslint"
+  },
+  "author": "Peter Wagner <pwagner@pebble.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "koa": "^1.2.4",
+    "koa-router": "^5.4.0",
+    "redis": "^2.6.2"
+  },
+  "devDependencies": {
+    "eslint": "^3.6.1",
+    "eslint-config-pebble": "^3.0.0",
+    "eslint-plugin-standard": "^2.0.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "pebble"
+    ]
+  }
+}
