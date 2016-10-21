@@ -1,1 +1,71 @@
-// FIXME: write something to verify Postgres connection+server
+'use strict';
+
+const pgp = require('pg-promise')();
+
+const config = require('../config');
+const COUNTER_NAME = 'counter';
+
+module.exports = (router) => {
+  if (!config.POSTGRES_URL) {
+    return;
+  }
+
+  let db;
+
+  /**
+   * Get database.
+   * @returns {*} Database.
+   */
+  function* getDb() {
+    if (!db) {
+      db = pgp(config.POSTGRES_URL);
+      yield db.none('CREATE TABLE IF NOT EXISTS counters (' +
+        'count_name VARCHAR(40) NOT NULL PRIMARY KEY, ' +
+        'count_value BIGINT NOT NULL DEFAULT 0' +
+        ');');
+    }
+    return db;
+  }
+
+  /**
+   * Get counter value.
+   */
+  router.get('/postgres/counter', function* () {
+    const db = yield getDb();
+    const res = yield db.oneOrNone('SELECT count_value FROM counters ' +
+      'WHERE count_name = $1;', COUNTER_NAME);
+
+    const count = res && parseInt(res.count_value, 10) || 0;
+    this.body = { count };
+  });
+
+  /**
+   * Increment counter value.
+   */
+  router.post('/postgres/counter', function* () {
+    const db = yield getDb();
+    const res = yield db.oneOrNone(
+      'INSERT INTO counters (count_name, count_value) VALUES ($1, 1)' +
+      'ON CONFLICT (count_name) DO UPDATE' +
+      '  SET (count_value) = (counters.count_value + 1)' +
+      '  WHERE counters.count_name = $1' +
+      'RETURNING count_value;',
+      COUNTER_NAME);
+    this.body = {
+      count: parseInt(res.count_value, 10)
+    };
+  });
+
+  /**
+   * Return server's info.
+   */
+  router.get('/postgres/info', function* () {
+    const db = yield getDb();
+    const allVars = yield db.many('SHOW ALL;');
+
+    this.body = {};
+    allVars.forEach((varEntry) => {
+      this.body[varEntry.name] = varEntry.setting;
+    });
+  });
+};

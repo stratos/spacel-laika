@@ -5,18 +5,18 @@ const assert = require('assert');
 const config = require('../config');
 const test = require('./test');
 
-describe('/redis', () => {
-  if (!config.REDIS_URL) {
+describe('/postgres', () => {
+  if (!config.POSTGRES_URL) {
     return;
   }
 
   describe('/info', () => {
     it('returns info', function* () {
       const info = yield test()
-        .get('/redis/info')
+        .get('/postgres/info')
         .expect(200)
         .expect('Content-Type', /json/);
-      assert.strictEqual('string', typeof info.body.redis_version);
+      assert.strictEqual('string', typeof info.body.server_version);
     });
   });
 
@@ -27,7 +27,7 @@ describe('/redis', () => {
      */
     function* counter() {
       const res = yield test()
-        .get('/redis/counter')
+        .get('/postgres/counter')
         .expect(200)
         .expect('Content-Type', /json/);
       return res.body.count;
@@ -42,7 +42,7 @@ describe('/redis', () => {
       const count = yield counter();
 
       const res = yield test()
-        .post('/redis/counter');
+        .post('/postgres/counter');
       const incremented = res.body.count;
       assert(incremented > count);
     });
