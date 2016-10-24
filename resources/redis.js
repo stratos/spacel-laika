@@ -7,6 +7,7 @@ const config = require('../config');
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
+const COUNTER_KEY = 'counter';
 const REDIS_TIMEOUT = 1000;
 const REDIS_BACKOFF = 100;
 
@@ -36,6 +37,23 @@ module.exports = (router) => {
     }
     return client;
   }
+
+  /**
+   * Get counter value.
+   */
+  router.get('/redis/counter', function* () {
+    const storedCount = yield getClient().getAsync(COUNTER_KEY);
+    const count = storedCount && parseInt(storedCount, 10) || 0;
+    this.body = { count };
+  });
+
+  /**
+   * Increment counter value.
+   */
+  router.post('/redis/counter', function* () {
+    const count = yield getClient().incrAsync(COUNTER_KEY);
+    this.body = { count };
+  });
 
   /**
    * Return server's info.

@@ -23,11 +23,11 @@ COPY npm-shrinkwrap.json /app/
 COPY package.json /app/
 RUN gosu app npm install --no-optional
 
-# Install remainder of code:
-COPY . /app
-
 EXPOSE 8080
 ENV PORT 8080
+
+# Install remainder of code:
+COPY . /app
 
 ENTRYPOINT ["/app/start.sh"]
 
