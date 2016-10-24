@@ -92,6 +92,11 @@
       "from": "error-inject@>=1.0.0 <1.1.0",
       "resolved": "https://registry.npmjs.org/error-inject/-/error-inject-1.0.0.tgz"
     },
+    "es6-sleep": {
+      "version": "2.0.2",
+      "from": "es6-sleep@latest",
+      "resolved": "https://registry.npmjs.org/es6-sleep/-/es6-sleep-2.0.2.tgz"
+    },
     "escape-html": {
       "version": "1.0.3",
       "from": "escape-html@>=1.0.1 <1.1.0",

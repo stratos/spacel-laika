@@ -1,9 +1,11 @@
 'use strict';
 
 const pgp = require('pg-promise')();
+const sleep = require('es6-sleep').generator;
 
 const config = require('../config');
 const COUNTER_NAME = 'counter';
+const STARTUP_ERROR = 'the database system is starting up';
 
 module.exports = (router) => {
   if (!config.POSTGRES_URL) {
@@ -18,11 +20,22 @@ module.exports = (router) => {
    */
   function* getDb() {
     if (!db) {
-      db = pgp(config.POSTGRES_URL);
-      yield db.none('CREATE TABLE IF NOT EXISTS counters (' +
-        'count_name VARCHAR(40) NOT NULL PRIMARY KEY, ' +
-        'count_value BIGINT NOT NULL DEFAULT 0' +
-        ');');
+      try {
+        db = pgp(config.POSTGRES_URL);
+        yield db.none('CREATE TABLE IF NOT EXISTS counters (' +
+          'count_name VARCHAR(40) NOT NULL PRIMARY KEY, ' +
+          'count_value BIGINT NOT NULL DEFAULT 0' +
+          ');');
+      } catch (e) {
+        db = undefined;
+        if (e.code !== 'ECONNREFUSED' && e.message !== STARTUP_ERROR) {
+          throw e;
+        }
+
+        // Connection error, retry:
+        yield sleep(100);
+        yield getDb();
+      }
     }
     return db;
   }

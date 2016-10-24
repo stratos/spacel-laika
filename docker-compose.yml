@@ -13,7 +13,7 @@ services:
       - REDIS_URL=redis://redis:6379
       - POSTGRES_URL=postgres://postgres:laika@postgres:5432/postgres
     ports:
-     - 8080:8080
+     - 8080
 
   redis:
     image: redis:3.2-alpine
