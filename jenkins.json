@@ -1,0 +1,4 @@
+{
+	"dockerImage": "pebbletech/spacel-laika",
+	"dockerRegistry": "hub.docker.com"
+}
