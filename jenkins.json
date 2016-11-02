@@ -1,5 +1,4 @@
 {
 	"dockerImage": "pebbletech/spacel-laika",
-	"dockerRegistry": "hub.docker.com",
-	"testCommand": "echo SAN DIMAS HIGH SCHOOL FOOTBALL RULES"
+	"dockerRegistry": "hub.docker.com"
 }
