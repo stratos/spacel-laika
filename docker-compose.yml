@@ -6,15 +6,21 @@ services:
     links:
       - redis
       - postgres
+      - peer
     volumes:
       - data:/mnt/data
     environment:
       - DISK_PATH=/mnt/data/file.txt
       - REDIS_URL=redis://redis:6379
       - POSTGRES_URL=postgres://postgres:laika@postgres:5432/postgres
+      - LAIKA_PEER_TEST=http://peer:8080/
     ports:
      - 8080
 
+  peer:
+    build: .
+    environment:
+      - MESSAGE=nested peer
   redis:
     image: redis:3.2-alpine
   postgres:
@@ -30,6 +36,7 @@ services:
       - DISK_PATH=true
       - REDIS_URL=true
       - POSTGRES_URL=true
+      - LAIKA_PEERS=test
     entrypoint: npm test
 
 volumes:

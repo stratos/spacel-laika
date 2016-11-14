@@ -8,6 +8,7 @@ const config = require('./config');
 // Add resources:
 require('./resources/disk')(router);
 require('./resources/environment')(router);
+require('./resources/peer')(router);
 require('./resources/postgres')(router);
 require('./resources/redis')(router);
 require('./resources/root')(router);
