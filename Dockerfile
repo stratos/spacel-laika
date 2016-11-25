@@ -1,4 +1,4 @@
-FROM node:6.9.0-slim
+FROM node:6.9.1-slim
 
 # Install Gosu for dropping privs:
 ENV GOSU_VERSION 1.10
